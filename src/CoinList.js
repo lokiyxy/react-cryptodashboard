@@ -1,22 +1,33 @@
 import React from 'react';
-import styled from 'styled-components';
-import {subtleBoxShadow, lightBlueBackground, greenBoxShadow} from './Style';
+import styled, {css} from 'styled-components';
+import {subtleBoxShadow, lightBlueBackground, greenBoxShadow, redBoxShadow} from './Style';
 
 const CoinGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 15px;
+  margin-top: 40px;
 `
 
 const CoinTitle = styled.div`
-  ${subtleBoxShadow};
-  ${lightBlueBackground};
+  ${subtleBoxShadow}
+  ${lightBlueBackground}
   padding: 10px;
   &:hover{
     cursor: pointer;
-    ${greenBoxShadow};
+    ${greenBoxShadow}
   }
+  ${props => props.favorite && css`
+    &:hover{
+      cursor: pointer;
+      ${redBoxShadow}
+    }
+  `}
 `
+
+// const FavouriteCoin = CoinTitle.extend`
+
+// `
 
 const CoinHeaderGrid = styled.div`
   display: grid;
@@ -27,10 +38,11 @@ const CoinSymbol = styled.div`
   justify-self: right;
 `
 
-export default function() {
+export default function(favorites=false) {
+  let coinKeys = favorites ? this.state.favorites : Object.keys(this.state.coinList).slice(0,50);
   return <CoinGrid>
-    {Object.keys(this.state.coinList).slice(0,50).map(coin => 
-      <CoinTitle>
+    {coinKeys.map(coin => 
+      <CoinTitle favorite={favorites}>
         <CoinHeaderGrid>
           <div>{this.state.coinList[coin].CoinName}</div>
           <CoinSymbol>{this.state.coinList[coin].Symbol}</CoinSymbol>

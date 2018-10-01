@@ -25,6 +25,7 @@ const checkFirstVisit = () => {
 class App extends Component {
   state = {
     page: 'settings',
+    favorites: ['BTC', 'ETH', 'XMR'],
     ...checkFirstVisit()
   }
   componentDidMount = async () => {
@@ -56,6 +57,7 @@ class App extends Component {
         Confirm Favourites
       </div>
       <div>
+        {CoinList.call(this, true)}
         {CoinList.call(this)}
       </div>
     </div>
