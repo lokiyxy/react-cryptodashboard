@@ -9,7 +9,7 @@ const CoinGrid = styled.div`
   margin-top: 40px;
 `
 
-const CoinTitle = styled.div`
+const CoinTile = styled.div`
   ${subtleBoxShadow}
   ${lightBlueBackground}
   padding: 10px;
@@ -22,6 +22,10 @@ const CoinTitle = styled.div`
       cursor: pointer;
       ${redBoxShadow}
     }
+  `}
+  ${props => props.chosen && !props.favorite && css `
+    pointer-events: none;
+    opacity: 0.4;
   `}
 `
 
@@ -37,18 +41,29 @@ const CoinHeaderGrid = styled.div`
 const CoinSymbol = styled.div`
   justify-self: right;
 `
-
+const DeleteIcon = styled.div`
+  justify-self: right;
+  display: none;
+  ${CoinTile}:hover & {
+    display: block;
+    color: red;
+  }
+`
 export default function(favorites=false) {
   let coinKeys = favorites ? this.state.favorites : Object.keys(this.state.coinList).slice(0,50);
   return <CoinGrid>
-    {coinKeys.map(coin => 
-      <CoinTitle favorite={favorites}>
+    {coinKeys.map(coinKey => 
+      <CoinTile chosen={this.isInFavorites(coinKey)} favorite={favorites} onClick={
+        favorites ? ()=>{this.removeCoinFromFavorites(coinKey)} : ()=>{this.addCoinToFavorites(coinKey)}
+        }>
         <CoinHeaderGrid>
-          <div>{this.state.coinList[coin].CoinName}</div>
-          <CoinSymbol>{this.state.coinList[coin].Symbol}</CoinSymbol>
+          <div>{this.state.coinList[coinKey].CoinName}</div>
+          {favorites ?
+            <DeleteIcon>X</DeleteIcon> :
+          <CoinSymbol>{this.state.coinList[coinKey].Symbol}</CoinSymbol>}
         </CoinHeaderGrid>
-        <div>{<img style={{height: '50px'}} src={`http://cryptocompare.com/${this.state.coinList[coin].ImageUrl}`} />}</div>
-      </CoinTitle>
+        <div>{<img style={{height: '50px'}} src={`http://cryptocompare.com/${this.state.coinList[coinKey].ImageUrl}`} />}</div>
+      </CoinTile>
     )}
   </CoinGrid>
 }
