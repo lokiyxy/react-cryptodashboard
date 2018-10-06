@@ -23,6 +23,6 @@ const SearchInput = styled.input`
 export default function (){
   return <SearchContainer>
     <WhiteText> Search All Coins</WhiteText>
-    <SearchInput/>
+    <SearchInput onKeyUp={this.filterCoins}/>
   </SearchContainer>
 } 
